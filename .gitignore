@@ -1,0 +1,32 @@
+# Credenciais e segredos - NUNCA versionar
+.env
+*.env
+!.env.example
+
+# Dados reais de clientes / exports (PII) - NUNCA versionar
+data/uy3_bruto/*
+data/treated/*
+data/final/*
+data/novavida/*
+data/entregas/*
+!data/uy3_bruto/.gitkeep
+!data/treated/.gitkeep
+!data/final/.gitkeep
+!data/novavida/.gitkeep
+!data/entregas/.gitkeep
+*.xlsx
+*.xls
+
+# Logs (podem conter caminhos locais e stack traces)
+logs/*
+!logs/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Ferramentas locais (nao fazem parte do produto)
+.claude/
+orchestrator.lock
