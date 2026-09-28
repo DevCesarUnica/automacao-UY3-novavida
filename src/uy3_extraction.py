@@ -47,10 +47,16 @@ def extrair(permitir_consulta_real: bool = False, headless: bool = True) -> Path
             f"'{settings.UY3_AMBIENTE}' agora e intencional."
         )
 
-    fim = datetime.now()
-    inicio = fim - timedelta(days=settings.UY3_JANELA_DIAS_CONSULTA)
-    start_date = inicio.strftime("%Y-%m-%d")
-    end_date = fim.strftime("%Y-%m-%d")
+    # fim = datetime.now()
+    # inicio = fim - timedelta(days=settings.UY3_JANELA_DIAS_CONSULTA)
+    # start_date = inicio.strftime("%Y-%m-%d")
+    # end_date = fim.strftime("%Y-%m-%d")
+    start_date = "2026-09-28"
+    end_date = "2026-09-29"
+    
+    #Regra atual hoje até amanhã
+    # cd automacao-uy3-novavida   
+    # python -m src.orchestrator --once --permitir-consulta-real --pular-novavida
 
     token = obter_token()
     registros = buscar_offers_request(token, start_date, end_date)

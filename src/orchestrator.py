@@ -167,6 +167,7 @@ def run_ciclo(
     permitir_criar_campanha: bool = False,
     limite_leads: int | None = None,
     headless: bool = True,
+    pular_novavida: bool = False,
 ) -> None:
     if not _adquirir_lock():
         return
@@ -222,6 +223,13 @@ def run_ciclo(
             resumo.ok(f"Limite aplicado: {linhas_dedup} leads (--limite-leads {limite_leads})")
 
         logger.info("Base pronta para envio ao Nova Vida: %s", final_sem_higienizar)
+
+        if pular_novavida:
+            resumo.pulado("Nova Vida: etapa pulada (--pular-novavida)")
+            resumo.pulado("Consolidacao: nao executada (etapa Nova Vida pulada)")
+            resumo.pulado("E-mail: nao enviado (etapa Nova Vida pulada)")
+            logger.info("=== Ciclo concluido em %.1fs (Nova Vida pulada) ===", time.time() - inicio)
+            return
 
         try:
             from src import novavida_integration
@@ -318,6 +326,15 @@ def main() -> None:
         action="store_true",
         help="Abre o navegador visivel (nao-headless), util para acompanhar o robo em testes",
     )
+    parser.add_argument(
+        "--pular-novavida",
+        action="store_true",
+        help=(
+            "Pula a etapa Nova Vida por completo (nenhum login/upload no Ipe), assim como "
+            "a consolidacao e o envio de e-mail que dependem dela. Roda so extracao UY3 + "
+            "tratamento + deduplicacao + planilha completa (todos os campos)."
+        ),
+    )
     args = parser.parse_args()
 
     if args.once:
@@ -327,6 +344,7 @@ def main() -> None:
             permitir_criar_campanha=args.permitir_criar_campanha,
             limite_leads=args.limite_leads,
             headless=not args.headed,
+            pular_novavida=args.pular_novavida,
         )
         return
 
@@ -339,6 +357,7 @@ def main() -> None:
             permitir_criar_campanha=args.permitir_criar_campanha,
             limite_leads=args.limite_leads,
             headless=not args.headed,
+            pular_novavida=args.pular_novavida,
         )
         time.sleep(intervalo_seg)
 
